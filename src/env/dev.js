@@ -1,5 +1,5 @@
 var settings = {
-    apiRoot: 'http://zzzfreeww.frpzj.kskxs.com:8081/api'
+    apiRoot: 'http://localhost:3000' // 'http://zzzfreeww.frpzj.kskxs.com:8081/api'
 }
 
 export default settings;

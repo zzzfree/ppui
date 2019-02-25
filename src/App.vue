@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <!-- <img alt="Vue logo" src="./assets/logo.png"> -->
+    <Breadcrumb v-bind:path='path' @pathChanged='onPathChanged'/>
     <button v-on:click="go()">go</button>
     <button v-on:click="collect()">collect</button>
     <ul >
@@ -34,6 +35,7 @@
 
 <script>
 import HelloWorld from "./components/HelloWorld.vue";
+import Breadcrumb from "./components/Breadcrumb.vue";
 //import Items from './components/Items.vue'
 import _ from "lodash";
 
@@ -43,14 +45,19 @@ var app = {
   name: "app",
   components: {
     HelloWorld //, Items
+    ,Breadcrumb
   },
   data: function() {
     return {
       data: [],
-      env: env
+      env: env,
+      path: 'aa/bb/cc/dd'
     };
   },
   methods: {
+    onPathChanged(p){
+      this.path = p;
+    },
     collect(){
       _.each(this.data, v=>{
         if(v.selected){
