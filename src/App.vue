@@ -1,12 +1,18 @@
 <template>
-  <div id="app">
+  <div id="app" >
     <!-- <img alt="Vue logo" src="./assets/logo.png"> -->
+
+    <div>Current path: {{ path }} </div>
+
     <Breadcrumb v-bind:path='path' @pathChanged='onPathChanged'/>
+    <DirList v-bind:files="data" v-bind:path='path' @selected='onDirSelected' />
+
     <button v-on:click="go()">go</button>
+    <button @click="unselectAll()">unselectAll</button> 
     <button v-on:click="collect()">collect</button>
     <ul >
       
-      <li class="imageItem"  v-for="v in data" v-on-visible="{onUpdate}"  >
+      <li class="imageItem"  v-for="v in imgs" v-on-visible="{onUpdate}"  >
         <div class="imageItem" v-bind:class="{selected:v.selected}">
           {{ v.path }}
           <div class="zoom">Z</div>
@@ -36,27 +42,54 @@
 <script>
 import HelloWorld from "./components/HelloWorld.vue";
 import Breadcrumb from "./components/Breadcrumb.vue";
+import DirList from "./components/DirList.vue";
 //import Items from './components/Items.vue'
 import _ from "lodash";
 
-import env from './env/dev';
+import env from './env/dev'; 
 
 var app = {
   name: "app",
   components: {
     HelloWorld //, Items
-    ,Breadcrumb
+    ,Breadcrumb,DirList
+  },
+  computed:{
+    path: function(){
+      return this.path;
+    },
+    imgs: function(){
+      var dd = _.filter(this.data, v=>{
+        return v.path && /(jpg)$/.test( v.path.toLowerCase() ) 
+      });
+      return dd;
+    }
   },
   data: function() {
     return {
       data: [],
       env: env,
-      path: 'aa/bb/cc/dd'
+      path: '---'
     };
   },
+  mounted(){
+    console.log('mounted now.');
+    this.go();
+  },
   methods: {
-    onPathChanged(p){
+    unselectAll(){
+      _.each(this.data, v =>{
+        v.selected = false;
+      });
+    },
+    onDirSelected(p){
+      console.log('dirchanged: '+p);
       this.path = p;
+      this.go();
+    },
+    onPathChanged(p){
+      this.path = p; 
+      this.go();
     },
     collect(){
       _.each(this.data, v=>{
@@ -74,17 +107,18 @@ var app = {
     },
     go() {
       var me = this;
-      axios.get( env.apiRoot + "/users").then(function(rsp) {
+      axios.get( env.apiRoot + "/files/" + this.path ).then(function(rsp) {
         console.log(rsp.data);
         var d = [];
         var j = 0;
-        for (var i = 0; i < 10; i++) {
+        for (var i = 0; i < 1; i++) {
           _.each(rsp.data, function(v) {
             if (++j > 600) return;
             d.push({
               isImage: v.indexOf(".") >= 0,
               path: v,
-              selected: false
+              selected: false,
+              deleted: false
             });
           });
         }

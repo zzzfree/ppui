@@ -1,0 +1,36 @@
+<template> 
+    <ul>
+        <li v-for="(v,i) in data">
+           <label v-bind:path="v.path" @click='go(v)'>
+               {{ v.path }}
+           </label>
+        </li>
+    </ul>
+</template>
+
+<script>
+
+import _ from 'lodash';
+
+export default {
+    props:{
+        path: String,
+        files: Array
+    },
+    computed:{
+        data: function(){
+            var dd = _.filter(this.files, v=>{
+                return v.path.indexOf('.') < 0;
+            });
+            return dd;
+        }
+    },
+    methods:{
+        go(v,i){ 
+            console.log('selected ' + v.path); 
+            var p =    this.path + (  this.path == '---' ? '' : '---'  )     + v.path   
+            this.$emit('selected', p ); 
+        }
+    }
+}
+</script> 

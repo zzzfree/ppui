@@ -13,21 +13,24 @@ export default {
     },
     computed:{
         data: function(){
-            return this.path.split('/');
+            return this.path.split('---');
         }
     },
     methods:{
         go(v,i){
             i++;
             console.log(i + ',' + v);
-            var d = this.path.split('/');
+            var d = this.path.split('---');
             var s = '';
             for(var n = 0; n<i; n++){
-                s += d[n] + '/'
+                s += d[n] + '---'
             }
             // this.path = s.substring(0,s.length-1);
-            var p = s.substring(0,s.length-1);
+            var p = s.replace(/\-{3}/ig,'/');
+            p = p.substring(0, p.length-1).replace(/\//ig,'---'); 
+            if(p == '') p = '---';
             this.$emit('pathChanged', p);
+
         }
     }
 }
