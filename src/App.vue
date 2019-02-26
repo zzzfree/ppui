@@ -12,7 +12,7 @@
     <button v-on:click="collect()">collect</button>
     <ul >
       
-      <li class="imageItem"  v-for="v in imgs" v-on-visible="{onUpdate}" v-if='v.deleted==false' >
+      <li class="imageItem"  v-for="(v,i) in imgs" v-on-visible="{onUpdate}" v-if='v.deleted==false' >
         <div class="imageItem" v-bind:class="{selected:v.selected}" >
           {{ v.path }}
           <div class="zoom">Z</div>
@@ -26,7 +26,7 @@
                         <h4>{{key}}</h4>: <h5>{{value}}</h5>
                         
                       </div> -->
-                      <img  v-if="onVisible.isVisible" v-bind:src="env.apiRoot + '/img/' + v.path " height="150px" max-width="150px" />
+                      <img  v-if="onVisible.isVisible || i<10" v-bind:src="env.apiRoot + '/img/' + path + '---' + v.path" height="150px" max-width="150px" />
                     </div> 
                         
                   </OnVisible>
