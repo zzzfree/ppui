@@ -12,8 +12,8 @@
     <button v-on:click="collect()">collect</button>
     <ul >
       
-      <li class="imageItem"  v-for="v in imgs" v-on-visible="{onUpdate}"  >
-        <div class="imageItem" v-bind:class="{selected:v.selected}">
+      <li class="imageItem"  v-for="v in imgs" v-on-visible="{onUpdate}" v-if='v.deleted==false' >
+        <div class="imageItem" v-bind:class="{selected:v.selected}" >
           {{ v.path }}
           <div class="zoom">Z</div>
           <div class="select" v-on:click='remove(v)'>S</div>
@@ -92,11 +92,32 @@ var app = {
       this.go();
     },
     collect(){
+      var p = this.path.replace(/\-{3}/ig, '/');
+      var dd = [];
       _.each(this.data, v=>{
         if(v.selected){
-          console.log(v.path); 
+          var d = p + '/' + v.path;
+          dd.push( d )
         }
       });
+        
+      console.log( dd ); 
+      var me = this; 
+
+      var p = me.path.replace(/\-{3}/ig,'/') + '/';
+
+      axios.post( env.apiRoot + "/files/remove" , { files: dd } ).then(rsp=>{
+        console.log( rsp.data );
+        if(rsp.data && rsp.data.length>0){
+          _.each(rsp.data, v=>{
+            var f = _.find(me.data, {path:v.path.replace(p,'')});
+            if(f && f.path){  
+              f.deleted = v.success; 
+            }
+          });
+        }
+      });
+
     },
     remove(v){
       v.selected = !v.selected;
