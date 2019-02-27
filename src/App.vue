@@ -106,7 +106,7 @@ var app = {
       var p = this.path.replace(/\-{3}/ig, '/');
       var dd = [];
       _.each(this.data, v=>{
-        if(v.selected){
+        if(v.selected && !v.deleted){
           var d = p + '/' + v.path;
           dd.push( d )
         }
