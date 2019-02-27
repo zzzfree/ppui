@@ -2,35 +2,38 @@
   <div id="app" >
     <!-- <img alt="Vue logo" src="./assets/logo.png"> -->
 
-    <div>Current path: {{ path }} </div>
+    <div>Current path: {{ currentPath }} </div>
 
     <Breadcrumb v-bind:path='path' @pathChanged='onPathChanged'/>
     <DirList v-bind:files="data" v-bind:path='path' @selected='onDirSelected' />
 
     <button v-on:click="go()">go</button>
-    <button @click="unselectAll()">unselectAll</button> 
-    <button v-on:click="collect()">collect</button>
+    <button @click="unselectAll()"><i class="icon-check-empty"></i> Clear </button> 
+    <button v-on:click="collect()"><i class="icon-trash"></i> Remove </button>
+    
     <ul >
       
       <li class="imageItem"  v-for="(v,i) in imgs" v-on-visible="{onUpdate}" v-if='v.deleted==false' >
         <div class="imageItem" v-bind:class="{selected:v.selected}" >
-          {{ v.path }}
-          <div class="zoom">Z</div>
-          <div class="select" v-on:click='remove(v)'>S</div>
-                  <OnVisible topOffset="-20%"
-                    bottomOffset="-20%"
-                    :repeat="true">
-                    <div slot-scope="{onVisible}">
-                      <!-- <div v-for="(value, key) in onVisible"
-                          :key="key">
-                        <h4>{{key}}</h4>: <h5>{{value}}</h5>
-                        
-                      </div> -->
-                      <img  v-if="onVisible.isVisible || i<10" v-bind:src="env.apiRoot + '/img/' + path + '---' + v.path" height="150px" max-width="150px" />
-                    </div> 
-                        
-                  </OnVisible>
+          
+          <div class="zoom"> <i class="icon-search"></i>    </div>
+          <div class="select" v-on:click='remove(v)'> <i class="icon-check"></i> </div>
 
+          <OnVisible topOffset="-20%"
+            bottomOffset="-20%"
+            :repeat="true">
+            <div slot-scope="{onVisible}">
+              <!-- <div v-for="(value, key) in onVisible"
+                  :key="key">
+                <h4>{{key}}</h4>: <h5>{{value}}</h5>
+                
+              </div> -->
+              <img  v-if="onVisible.isVisible || i<10" v-bind:src="env.apiRoot + '/img/' + path + '---' + v.path" height="150px" max-width="150px" />
+              
+            </div> 
+                
+          </OnVisible>
+          <label> {{ v.path }}  </label>
         </div>
       </li> 
     </ul>
@@ -55,8 +58,11 @@ var app = {
     ,Breadcrumb,DirList
   },
   computed:{
-    path: function(){
-      return this.path;
+    // path: function(){
+    //   return this.path;
+    // },
+    currentPath: function(){
+      return this.path.replace(/\-{3}/ig, '/');
     },
     imgs: function(){
       var dd = _.filter(this.data, v=>{
@@ -173,6 +179,15 @@ export default app;
 }
 
 .selected{
-  background: red;
+  background: #999;
+  opacity: 0.5;
+}
+
+.zoom{
+  float: left;  
+}
+
+.select{
+  float: right;
 }
 </style>

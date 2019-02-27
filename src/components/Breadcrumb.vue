@@ -1,7 +1,8 @@
 <template> 
     <ul>
-        <li v-for="(v,i) in data">
-           <div v-on:click='go(v,i)'> {{ i }} - {{ v }} </div>
+        <li v-for="(v,i) in data"> 
+           <div v-if='i==0' v-on:click='go(v,i)'> /Root </div>
+           <div v-if='i>0' v-on:click='go(v,i)'> /{{ v }} </div>
         </li>
     </ul>
 </template>
@@ -37,5 +38,19 @@ export default {
 </script>
 
 <style scoped>
-
+    li{
+        list-style: none;
+        float: left;
+        display: inline;
+        cursor: pointer;
+        padding: 5px 10px;
+    }
+    li:hover{
+        color:blue;
+    }
+    ul{
+        clear: both;   
+        visibility: visible;
+        display: block;
+    }
 </style>

@@ -34,3 +34,24 @@ export default {
     }
 }
 </script> 
+
+<style scoped>
+    li {
+        list-style: none;  
+        text-align: left; 
+        padding: 5px 10px;
+    }
+    li label{ 
+        text-align: left;
+        cursor: pointer;
+        padding: 5px 10px;
+    }
+    li label:hover{
+        color:blue;
+    }
+    ul{
+        clear: both;   
+        visibility: visible;
+        display: block;
+    }
+</style>
