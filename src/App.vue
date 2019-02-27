@@ -8,16 +8,19 @@
     <DirList v-bind:files="data" v-bind:path='path' @selected='onDirSelected' />
 
     <button v-on:click="go()">go</button>
-    <button @click="unselectAll()"><i class="icon-check-empty"></i> Clear </button> 
-    <button v-on:click="collect()"><i class="icon-trash"></i> Remove </button>
+    <button class='toclear' @click="unselectAll()"><i class="icon-check-empty"></i> Clear </button> 
+    <button class='toremove' v-on:click="collect()"><i class="icon-trash"></i> Remove </button>
+
+
+    <div class="totop"> <a href='#app'> <i class="icon-double-angle-up icon-large"></i>  </a>  </div>
     
     <ul >
       
       <li class="imageItem"  v-for="(v,i) in imgs" v-on-visible="{onUpdate}" v-if='v.deleted==false' >
         <div class="imageItem" v-bind:class="{selected:v.selected}" >
           
-          <div class="zoom"> <i class="icon-search"></i>    </div>
-          <div class="select" v-on:click='remove(v)'> <i class="icon-check"></i> </div>
+          <div class="zoom"> <i class="icon-search icon-large"></i>    </div>
+          <div class="select" v-on:click='remove(v)'> <i class="icon-check icon-large"></i> </div>
 
           <OnVisible topOffset="-20%"
             bottomOffset="-20%"
@@ -37,7 +40,6 @@
         </div>
       </li> 
     </ul>
-     
     <!-- <HelloWorld msg="Welcome to Your Vue.js App"/> -->
   </div>
 </template>
@@ -98,6 +100,9 @@ var app = {
       this.go();
     },
     collect(){
+
+      if(!confirm('Confirm to remove?')) return;
+
       var p = this.path.replace(/\-{3}/ig, '/');
       var dd = [];
       _.each(this.data, v=>{
@@ -174,8 +179,8 @@ export default app;
   float: left;
   margin: 10px;
   list-style-type: none;
-  min-width: 180px;
-  min-height: 180px;
+  min-width: 250px;
+  min-height: 250px;
 }
 
 .selected{
@@ -189,5 +194,20 @@ export default app;
 
 .select{
   float: right;
+}
+.totop{
+  position: fixed;
+  right: 10px;
+  bottom: 10px;
+}
+.toclear{
+  position: fixed;
+  left: 10px;
+  top: 10px; 
+}
+.toremove{
+  position: fixed;
+  left: 10px;
+  top: 50px; 
 }
 </style>
