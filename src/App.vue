@@ -22,7 +22,14 @@
           <div class="zoom"> <i class="icon-search icon-large"></i>    </div>
           <div class="select" v-on:click='remove(v)'> <i class="icon-check icon-large"></i> </div>
 
-          <OnVisible topOffset="-20%"
+          <div v-if=" i<20 ">
+
+            <img   v-bind:src="env.apiRoot + '/img/' + path + '---' + v.path" height="150px" max-width="150px" />
+ 
+          </div>
+         
+
+          <OnVisible v-if="i>20" topOffset="-20%"
             bottomOffset="-20%"
             :repeat="true">
             <div slot-scope="{onVisible}">
@@ -31,7 +38,7 @@
                 <h4>{{key}}</h4>: <h5>{{value}}</h5>
                 
               </div> -->
-              <img  v-if="onVisible.isVisible || i<10" v-bind:src="env.apiRoot + '/img/' + path + '---' + v.path" height="150px" max-width="150px" />
+              <img  v-if="onVisible.isVisible && i>20" v-bind:src="env.apiRoot + '/img/' + path + '---' + v.path" height="150px" max-width="150px" />
               
             </div> 
                 
@@ -52,6 +59,14 @@ import DirList from "./components/DirList.vue";
 import _ from "lodash";
 
 import env from './env/dev'; 
+
+const crypto = require('crypto');
+
+function md5(s){
+  const hash = crypto.createHash('md5');
+  hash.update(s);
+  return hash.digest('hex');
+}
 
 var app = {
   name: "app",
@@ -138,6 +153,10 @@ var app = {
       // console.log(item);
     },
     go() {
+
+      console.log(md5('ABC'));
+ 
+
       var me = this;
       axios.get( env.apiRoot + "/files/" + this.path ).then(function(rsp) {
         console.log(rsp.data);

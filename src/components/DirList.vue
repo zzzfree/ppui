@@ -20,7 +20,7 @@ export default {
     computed:{
         data: function(){
             var dd = _.filter(this.files, v=>{
-                return v.path.indexOf('.') < 0;
+                return /\.[a-zA-Z]{3}$/i.test(  v.path  ) == false // .indexOf('.') < 0;
             });
             return dd;
         }
