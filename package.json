@@ -12,6 +12,7 @@
     "gm": "^1.23.1",
     "lodash": "^4.17.11",
     "vue": "^2.6.6",
+    "vue-cli": "^2.9.6",
     "vue-on-visible": "^0.5.2"
   },
   "devDependencies": {
