@@ -196,10 +196,12 @@ export default app;
 
 .imageItem{
   float: left;
-  margin: 10px;
+  margin: 1px;
   list-style-type: none;
   min-width: 250px;
   min-height: 250px;
+  width:30%;
+  border: 1px solid #ccc;
 }
 
 .selected{
@@ -208,25 +210,27 @@ export default app;
 }
 
 .zoom{
-  float: left;  
+  float: left;
+  margin-left: 20px;  
 }
 
 .select{
   float: right;
+  margin-right: 20px;
 }
 .totop{
   position: fixed;
-  right: 10px;
+  right: 20px;
   bottom: 10px;
 }
 .toclear{
   position: fixed;
-  left: 10px;
+  left: 20px;
   top: 10px; 
 }
 .toremove{
   position: fixed;
-  left: 10px;
+  left: 20px;
   top: 50px; 
 }
 </style>
