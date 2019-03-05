@@ -11,6 +11,9 @@
     <button class='toclear' @click="unselectAll()"><i class="icon-check-empty"></i> Clear </button> 
     <button class='toremove' v-on:click="collect()"><i class="icon-trash"></i> Remove </button>
 
+    <div class='picZoom' v-if='isShowZoom' @click='closeZoom()'>
+      <img v-bind:src="env.apiRoot + '/img/' + path + '---' + currentZoomPath  " />
+    </div>
 
     <div class="totop"> <a href='#app'> <i class="icon-double-angle-up icon-large"></i>  </a>  </div>
     
@@ -19,8 +22,9 @@
       <li class="imageItem"  v-for="(v,i) in imgs" v-on-visible="{onUpdate}" v-if='v.deleted==false' >
         <div  v-bind:class="{selected:v.selected}" >
           
-          <div class="zoom"> <i class="icon-search icon-large"></i>    </div>
+          <div class="zoom" v-on:click='zoom(v)'> <i class="icon-search icon-large"></i>    </div>
           <div class="select" v-on:click='remove(v)'> <i class="icon-check icon-large"></i> </div>
+          <div class="download" v-on:click='download(v)'> <i class="icon-download-alt icon-large"></i> </div>
 
           <div v-if=" i<20 ">
 
@@ -81,6 +85,9 @@ var app = {
     currentPath: function(){
       return this.path.replace(/\-{3}/ig, '/');
     },
+    currentZoomPath: function(){
+      return this.zoomPath;
+    },
     imgs: function(){
       var dd = _.filter(this.data, v=>{
         return v.path && /(jpg)$/.test( v.path.toLowerCase() ) 
@@ -92,7 +99,9 @@ var app = {
     return {
       data: [],
       env: env,
-      path: '---'
+      path: '---',
+      zoomPath: '',
+      isShowZoom: false
     };
   },
   mounted(){
@@ -100,6 +109,17 @@ var app = {
     this.go();
   },
   methods: {
+    zoom(v){
+      this.zoomPath = v.path + '?width=' + window.innerWidth;
+      this.isShowZoom = true;
+    },
+    download(v){
+      var p = env.apiRoot + '/img/' + this.path + '---' + v.path + '?width=full';
+      window.open(p); 
+    },
+    closeZoom(){
+      this.isShowZoom = false;
+    },
     unselectAll(){
       _.each(this.data, v =>{
         v.selected = false;
@@ -202,6 +222,7 @@ export default app;
   min-height: 250px;
   max-width:30%;
   border: 1px solid #ccc;
+    position: relative;
 }
 
 .selected{
@@ -232,5 +253,16 @@ export default app;
   position: fixed;
   left: 20px;
   top: 50px; 
+}
+.download{
+  position: absolute;
+  bottom: 20px;
+    left: 20px;
+}
+.picZoom{
+  position: fixed;
+    width: 95%;
+    z-index: 10000;
+    top: 10px;
 }
 </style>
