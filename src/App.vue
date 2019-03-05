@@ -17,7 +17,7 @@
     <ul >
       
       <li class="imageItem"  v-for="(v,i) in imgs" v-on-visible="{onUpdate}" v-if='v.deleted==false' >
-        <div class="imageItem" v-bind:class="{selected:v.selected}" >
+        <div  v-bind:class="{selected:v.selected}" >
           
           <div class="zoom"> <i class="icon-search icon-large"></i>    </div>
           <div class="select" v-on:click='remove(v)'> <i class="icon-check icon-large"></i> </div>
@@ -200,7 +200,7 @@ export default app;
   list-style-type: none;
   min-width: 250px;
   min-height: 250px;
-  width:30%;
+  max-width:30%;
   border: 1px solid #ccc;
 }
 
