@@ -1,3 +1,5 @@
+<!-- icons example http://caibaojian.com/fontawesome/cheatsheet.html -->
+
 <template>
   <div id="app" >
     <!-- <img alt="Vue logo" src="./assets/logo.png"> -->
@@ -7,7 +9,7 @@
     <Breadcrumb v-bind:path='path' @pathChanged='onPathChanged'/>
     <DirList v-bind:files="data" v-bind:path='path' @selected='onDirSelected' />
 
-    <button v-on:click="go()">go</button>
+    <!-- <button v-on:click="go()">go</button> -->
     <button class='toclear' @click="unselectAll()"><i class="icon-check-empty"></i> Clear </button> 
     <button class='toremove' v-on:click="collect()"><i class="icon-trash"></i> Remove </button>
 
@@ -17,6 +19,7 @@
     </div>
 
     <div class="totop"> <a href='#app'> <i class="icon-double-angle-up icon-large"></i>  </a>  </div>
+    <div class="back" v-on:click='back()'>  <i class=" icon-arrow-left icon-largewq" aria-hidden="true"></i>   </div>
     
     <ul class='listItems'>
       
@@ -149,6 +152,18 @@ var app = {
       this.path = p;
       this.go();
     },
+    back(){
+      // ---d2t
+      if(this.path==='---') return;
+      var pos = this.path.lastIndexOf("---");
+      if(pos>0){
+        this.path = this.path.substring(0, pos);
+      } else {
+        this.path = '---';
+      }  
+      console.log('dirchanged: '+ this.path);
+      this.go();
+    },
     onPathChanged(p){
       this.path = p; 
       this.go();
@@ -181,6 +196,7 @@ var app = {
             }
           });
         }
+        document.body.scrollTop = 0;
       });
 
     },
@@ -291,6 +307,12 @@ export default app;
 .totop{
   position: fixed;
   right: 20px;
+  bottom: 10px;
+  z-index: 10;
+}
+.back{
+  position: fixed;
+  right: 60px;
   bottom: 10px;
   z-index: 10;
 }
