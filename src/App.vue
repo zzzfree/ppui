@@ -1,7 +1,7 @@
 <template>
   <div id="app" >
     <!-- <img alt="Vue logo" src="./assets/logo.png"> -->
-
+    <div>{{ deviceInfo }} </div>
     <div>Current path: {{ currentPath }} </div>
 
     <Breadcrumb v-bind:path='path' @pathChanged='onPathChanged'/>
@@ -11,43 +11,51 @@
     <button class='toclear' @click="unselectAll()"><i class="icon-check-empty"></i> Clear </button> 
     <button class='toremove' v-on:click="collect()"><i class="icon-trash"></i> Remove </button>
 
-    <div class='picZoom' v-if='isShowZoom' @click='closeZoom()'>
+    <div class='picZoom' v-if='isShowZoom' @click='closeZoom()'> 
+      <label> {{ path }}  </label>
       <img v-bind:src="env.apiRoot + '/img/' + path + '---' + currentZoomPath  " />
     </div>
 
     <div class="totop"> <a href='#app'> <i class="icon-double-angle-up icon-large"></i>  </a>  </div>
     
-    <ul >
+    <ul class='listItems'>
       
       <li class="imageItem"  v-for="(v,i) in imgs" v-on-visible="{onUpdate}" v-if='v.deleted==false' >
-        <div  v-bind:class="{selected:v.selected}" >
+        <div  v-bind:class="{selected:v.selected}" v-bind:title="v.path" >
           
           <div class="zoom" v-on:click='zoom(v)'> <i class="icon-search icon-large"></i>    </div>
           <div class="select" v-on:click='remove(v)'> <i class="icon-check icon-large"></i> </div>
           <div class="download" v-on:click='download(v)'> <i class="icon-download-alt icon-large"></i> </div>
 
-          <div v-if=" i<20 ">
+          <div class='imgContainer' v-if=" i<20 "   :style="{width: itemWidth +'px', height: itemWidth + 'px'}"  >
 
-            <img   v-bind:src="env.apiRoot + '/img/' + path + '---' + v.path" height="150px" max-width="150px" />
+            <!-- <img v-on:click='zoom(v)'  v-bind:src="env.apiRoot + '/img/' + path + '---' + v.path" height="150px" max-width="150px" /> -->
+            <img v-on:click='zoom(v)'  v-bind:src=" thumborPath + v.path " height="150px" max-width="150px" />
  
           </div>
-         
+   
+          <div class='imgContainer' v-if=" i>=20 " :style="{width: itemWidth +'px', height: itemWidth + 'px'}"  >
 
-          <OnVisible v-if="i>20" topOffset="-20%"
-            bottomOffset="-20%"
-            :repeat="true">
-            <div slot-scope="{onVisible}">
-              <!-- <div v-for="(value, key) in onVisible"
-                  :key="key">
-                <h4>{{key}}</h4>: <h5>{{value}}</h5>
-                
-              </div> -->
-              <img  v-if="onVisible.isVisible && i>20" v-bind:src="env.apiRoot + '/img/' + path + '---' + v.path" height="150px" max-width="150px" />
-              
-            </div> 
-                
-          </OnVisible>
-          <label> {{ v.path }}  </label>
+
+            <OnVisible  topOffset="-20%"
+              bottomOffset="-20%"  
+              :repeat="true">
+              <div  slot-scope="{onVisible}">
+                <!-- <div v-for="(value, key) in onVisible"
+                    :key="key">
+                  <h4>{{key}}</h4>: <h5>{{value}}</h5>
+                  
+                </div> -->
+                <!-- <img v-on:click='zoom(v)' v-if="onVisible.isVisible && i>=20" v-bind:src="env.apiRoot + '/img/' + path + '---' + v.path" height="150px" max-width="150px" /> -->
+                <span v-if="onVisible.isVisible && i>=20" >
+                <img v-on:click='zoom(v)'  v-bind:src=" thumborPath + v.path " height="150px" max-width="150px" />
+                </span>
+              </div> 
+                  
+            </OnVisible>
+ 
+          </div> 
+          
         </div>
       </li> 
     </ul>
@@ -82,22 +90,33 @@ var app = {
     // path: function(){
     //   return this.path;
     // },
+    deviceInfo: function(){
+      return "deviceInfo: " + screen.availWidth + ',' + window.innerWidth;
+    },
     currentPath: function(){
       return this.path.replace(/\-{3}/ig, '/');
     },
     currentZoomPath: function(){
       return this.zoomPath;
     },
+    thumborPath: function(v){
+      var p = 'http://192.168.10.104:8080/unsafe/200x200/http://192.168.10.104:30080/static/';
+      p += this.currentPath.replace('/d2t/','');
+      p += '/';
+      //p += v.path;
+      return p;
+    },
     imgs: function(){
       var dd = _.filter(this.data, v=>{
-        return v.path && /(jpg)$/.test( v.path.toLowerCase() ) 
-      });
+        return v.path && /(jpg|jpeg)$/.test( v.path.toLowerCase() ) 
+      }); 
       return dd;
     }
   },
   data: function() {
     return {
       data: [],
+      itemWidth: screen.availWidth/3.1,
       env: env,
       path: '---',
       zoomPath: '',
@@ -196,6 +215,7 @@ var app = {
 
         me.data = [];
         me.data = d;
+ 
       });
     }
   }
@@ -214,15 +234,33 @@ export default app;
   margin-top: 60px;
 }
 
+.listItems{
+  margin: 5% 1px;
+}
+
 .imageItem{
   float: left;
   margin: 1px;
+  min-height: 115px;
   list-style-type: none;
-  min-width: 250px;
-  min-height: 250px;
-  max-width:30%;
+  /* min-width: 250px; */
+  /* min-height: 250px; */
+  max-width:32%;
   border: 1px solid #ccc;
-    position: relative;
+  position: relative;
+}
+
+.imgContainer{
+  /* width: 100px;
+  height: 100px; */
+  overflow: hidden;
+  display: block; 
+}
+
+.imageItem img{
+  width: 98%;
+  height: auto;
+  vertical-align: middle;
 }
 
 .selected{
@@ -232,37 +270,59 @@ export default app;
 
 .zoom{
   float: left;
-  margin-left: 20px;  
+  margin-left: 10%;  
+  position: absolute;
 }
 
 .select{
+  position: absolute;
   float: right;
-  margin-right: 20px;
+  margin-right: 10%;
+  right: 0%;
 }
+
+
+.download{
+  position: absolute;
+  bottom: 20px;
+    left: 10%;
+}
+
 .totop{
   position: fixed;
   right: 20px;
   bottom: 10px;
+  z-index: 10;
 }
 .toclear{
   position: fixed;
   left: 20px;
   top: 10px; 
+  z-index: 10;
 }
 .toremove{
   position: fixed;
   left: 20px;
   top: 50px; 
-}
-.download{
-  position: absolute;
-  bottom: 20px;
-    left: 20px;
+  z-index: 10;
 }
 .picZoom{
+  background-color: white;
+  padding: 5% 0%;
   position: fixed;
     width: 95%;
     z-index: 10000;
     top: 10px;
 }
+
+.imageItem label {
+    overflow: hidden;
+    height: 12px;
+    display: block;
+    font-size: 12px;
+    margin-bottom: 5px;
+}
+
+
+
 </style>
