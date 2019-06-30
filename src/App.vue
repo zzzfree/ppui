@@ -104,7 +104,8 @@ var app = {
     },
     thumborPath: function(v){
       var p = 'http://192.168.10.104:8080/unsafe/200x200/http://192.168.10.104:30080/static/';
-      p += this.currentPath.replace('/d2t/','');
+      //p += this.currentPath.replace('/d2t/','');
+      p += this.currentPath;
       p += '/';
       //p += v.path;
       return p;
