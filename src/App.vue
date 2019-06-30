@@ -30,14 +30,14 @@
           <div class="select" v-on:click='remove(v)'> <i class="icon-check icon-large"></i> </div>
           <div class="download" v-on:click='download(v)'> <i class="icon-download-alt icon-large"></i> </div>
 
-          <div class='imgContainer' v-if=" i<20 "   :style="{width: itemWidth +'px', height: itemWidth + 'px'}"  >
+          <div class='imgContainer' v-if=" i<20 || i>imgs.length-10"   :style="{width: itemWidth +'px', height: itemWidth + 'px'}"  >
 
             <!-- <img v-on:click='zoom(v)'  v-bind:src="env.apiRoot + '/img/' + path + '---' + v.path" height="150px" max-width="150px" /> -->
             <img v-on:click='zoom(v)'  v-bind:src=" thumborPath + v.path " height="150px" max-width="150px" />
  
           </div>
    
-          <div class='imgContainer' v-if=" i>=20 " :style="{width: itemWidth +'px', height: itemWidth + 'px'}"  >
+          <div class='imgContainer' v-if=" i>=20 && i<=imgs.length-10" :style="{width: itemWidth +'px', height: itemWidth + 'px'}"  >
 
 
             <OnVisible  topOffset="-20%"
