@@ -8,7 +8,7 @@
 
     <Breadcrumb v-bind:path='path' @pathChanged='onPathChanged'/>
     <DirList v-bind:files="data" v-bind:path='path' @selected='onDirSelected' />
-
+    <hr style='width:100%;clear:both;margin:5px 0px;'/>
     <!-- <button v-on:click="go()">go</button> -->
     <button class='toclear' @click="unselectAll()"><i class="icon-check-empty"></i> Clear </button> 
     <button class='toremove' v-on:click="collect()"><i class="icon-trash"></i> Remove </button>

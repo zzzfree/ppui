@@ -5,7 +5,7 @@
                {{ v.path }}
            </label>
         </li>
-    </ul>
+    </ul>    
 </template>
 
 <script>
@@ -39,12 +39,15 @@ export default {
     li {
         list-style: none;  
         text-align: left; 
-        padding: 5px 10px;
+        padding: 5px 5px;
+        float: left;
+        background: rgb(217, 241, 255);
+        margin: 2px 5px;
     }
     li label{ 
         text-align: left;
         cursor: pointer;
-        padding: 5px 10px;
+        padding: 5px 0px;
     }
     li label:hover{
         color:blue;
