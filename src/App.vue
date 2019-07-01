@@ -103,7 +103,11 @@ var app = {
       return this.zoomPath;
     },
     thumborPath: function(v){
-      var p = 'http://192.168.10.104:8080/unsafe/200x200/http://192.168.10.104:30080/static/';
+      // var p = 'http://192.168.10.104:8090/200/http://192.168.10.104:30080/static/' // imageproxy by go
+      // var p = 'http://192.168.10.104:8080/unsafe/200x200/http://192.168.10.104:30080/static/';
+      // var p = 'http://192.168.10.104:8080/unsafe/200x200/http://192.168.10.104:30080/static/';
+      // var p = 'http://192.168.10.104:8099/thumbor';  
+      var p = './thumbor';  // nginx proxy_pass
       //p += this.currentPath.replace('/d2t/','');
       p += this.currentPath;
       p += '/';
